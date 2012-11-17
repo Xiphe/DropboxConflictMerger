@@ -1,0 +1,38 @@
+.Differences .ChangeReplace td,
+.Differences .ChangeInsert td,
+.Differences .ChangeDelete td {
+	cursor: pointer;
+}
+.Differences .ChangeReplace td.hover,
+.Differences .ChangeInsert td.hover,
+.Differences .ChangeDelete td.hover {
+	background: #000;
+	color: #fff;
+}
+.Differences .ChangeReplace td.use.hover,
+.Differences .ChangeInsert td.use.hover,
+.Differences .ChangeDelete td.use.hover {
+	cursor: default;
+}
+.Differences .ChangeReplace td.use,
+.Differences .ChangeInsert td.use,
+.Differences .ChangeDelete td.use {
+	background: #6EEF81;
+}
+.Differences .ChangeReplace td.use del,
+.Differences .ChangeInsert td.use del,
+.Differences .ChangeDelete td.use del {
+	background: #0CD123;
+}
+.Differences .ChangeReplace td.dontUse,
+.Differences .ChangeInsert td.dontUse,
+.Differences .ChangeDelete td.dontUse {
+	background: #F7F7F7;
+	color: #DDDDDD;
+}
+.Differences .ChangeReplace td.dontUse del,
+.Differences .ChangeInsert td.dontUse del,
+.Differences .ChangeDelete td.dontUse del {
+	background: #DDDDDD;
+	color: #BBBBBB;
+}
