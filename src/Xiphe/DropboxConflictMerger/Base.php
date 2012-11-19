@@ -98,7 +98,7 @@ class Base {
 			}
 		}
 		
-		echo serialize(self::$s_r);
+		echo json_encode(self::$s_r);
 		exit;
 	}
 

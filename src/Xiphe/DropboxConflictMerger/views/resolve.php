@@ -21,10 +21,24 @@ $fileA = basename($diffFiles[0]['path']);
 $fileB = basename($diffFiles[1]['path']);
 
 $HTML->p(
-		'Analyzing differences between <code>%s</code> and <code>%s</code>.',
+		'Analyzing differences between %s and %s.',
 		null,
-		$fileA,
-		$fileB
+		$HTML->ri_code(
+			$fileA,
+			array(
+				'id' => 'leftfile',
+				'data-modified' => $diffFiles[0]['modified'],
+				'data-client_mtime' => $diffFiles[0]['client_mtime']
+			)
+		),
+		$HTML->ri_code(
+			$fileB,
+			array(
+				'id' => 'rightfile',
+				'data-modified' => $diffFiles[1]['modified'],
+				'data-client_mtime' => $diffFiles[1]['client_mtime']
+			)
+		)
 	);
 if (count($files)) {
 	$list = X\THETOOLS::readableList($files, '</code> and </code>', '</code>, </code>');
@@ -70,9 +84,42 @@ if (Dropbox::getInstance()->justLineEndings()) {
 	// ->hidden('name=after|value=?'.$HTML->esc(http_build_query($_GET)))
 	->submit('value=Continue|.btn btn-large pull-right');
 } else {
+	$i = 1;
 	$HTML->end('.container-narrow')->s_div('.row-fluid|style=width: 90%; margin:auto;');
 	Dropbox::getInstance()->getDiff();
-	$HTML->end('.row-fluid')->s_div('.container-narrow');
-	$HTML->a('Merge', '#merge|%#merge|.btn btn-large pull-right|style=margin-top: 10px;');
+	$HTML->end('.row-fluid')->s_div('.container-narrow')
+	->a('Use All Left', '#left|%#left|.btn pull-left|style=margin-top: 10px;')
+	->a('Use All Right', '#right|%#right|.btn pull-right|style=margin-top: 10px;')
+	->div(null, '.clearfix')->hr()
+	->h3('Save as:')
+	->radio(
+		array(
+			'id' => 'keep'.$i++,
+			'name' => 'keep',
+			'value' => $diffFiles[0]['path'],
+			'class' => 'pull-left filename',
+			'checked' => null
+		),
+		array(
+			'glue' => 'true',
+			'inner' => $fileA,
+			'pos' => 'after'
+		)
+	)
+	->radio(
+		array(
+			'id' => 'keep'.$i++,
+			'name' => 'keep',
+			'value' => $diffFiles[1]['path'],
+			'class' => 'pull-left filename'
+		),
+		array(
+			'glue' => 'true',
+			'inner' => $fileB,
+			'pos' => 'after'
+		)
+	)
+	->script('var currentFiles = %s;', null, json_encode(array($fileA, $fileB)))
+	->a('Merge and next', '#merge|%#merge|.btn btn-large pull-right|style=margin-top: 10px;');
 }
 endif;

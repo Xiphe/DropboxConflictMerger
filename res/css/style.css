@@ -2,8 +2,6 @@ body {
   padding-top: 20px;
   padding-bottom: 40px;
 }
-
-/* Custom container */
 .container-narrow {
   margin: 0 auto;
   max-width: 700px;
@@ -11,8 +9,6 @@ body {
 .container-narrow > hr {
   margin: 30px 0;
 }
-
-/* Main marketing message and sign up button */
 .jumbotron {
   margin: 60px 0;
   text-align: center;
@@ -26,10 +22,46 @@ body {
   padding: 14px 24px;
 }
 
-/* Supporting marketing content */
-.marketing {
-  margin: 60px 0;
+input[type="radio"] {
+  margin-right: 10px;
 }
-.marketing p + h4 {
-  margin-top: 28px;
+
+table.Differences thead th {
+  background: #F7F7F9;
+  border-color: #E1E1E8;
+  border-width: 1px;
+  border-style: solid;
+}
+table.Differences thead .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+table.Differences thead .time {
+  display: none;
+}
+table.Differences thead:hover .time {
+  display: inline;
+}
+table.Differences thead th:first-child {
+  padding: 10px 15px;
+  border-right: none;
+}
+table.Differences thead th:last-child {
+  padding: 10px 15px 10px 0;
+  border-left: none;
+}
+table.Differences tbody th {
+  background-color: #fff;
+  background: #F7F7F9;
+  border-right: 1px solid #E1E1E8;
+  border-left: 1px solid #E1E1E8;
+}
+table.Differences tbody td {
+  border-right: 1px solid #E1E1E8;
+}
+table.Differences {
+  color: #333333 !important;
+  border-bottom: 1px solid #E1E1E8;
+  box-shadow: -1px 1px 7px rgba(0, 0, 0, 0.06);
 }

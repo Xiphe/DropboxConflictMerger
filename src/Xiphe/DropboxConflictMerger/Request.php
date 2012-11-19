@@ -27,6 +27,10 @@ class Request extends Base
 				unset($_SESSION['oauth_tokens']);
 				header('Location: '.X\HTML\core\Config::get('baseUrl'));
 				exit;
+			case 'merge':
+				Dropbox::getInstance()->merge();
+				echo 0;
+				exit;
 			}
 		}
 	}

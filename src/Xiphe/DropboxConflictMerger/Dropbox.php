@@ -19,9 +19,11 @@ class Dropbox extends Base
     private $_oauth;
     private $_dropbox;
 
+    private static $_tmpFolder;
+    private static $_oauthLib = 'pear';
     private static $_lang = array(
         'de_DE' => array(
-            'conflict' => ' (In Konflikt stehende Kopie von ',
+            'conflict' => '(In Konflikt stehende Kopie von',
             'computer' => '/.*\(In Konflikt stehende Kopie von ([^ ]+)/',
             'origin' => '/ \(In Konflikt stehende Kopie von [^ ]+ [^.]+\)/'
         )
@@ -47,11 +49,19 @@ class Dropbox extends Base
      */
     public function init($keys = null) {
         @session_start();
-        // $oauth = new Dropbox_OAuth_PHP($keys['consumerKey'], $keys['consumerSecret']);
 
-        // If the PHP OAuth extension is not available, you can try
-        // PEAR's HTTP_OAUTH instead.
-        $this->_oauth = new \Dropbox_OAuth_PEAR($keys['consumerKey'], $keys['consumerSecret']);
+        self::$_tmpFolder = dirname(__FILE__).DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR;
+        if (self::$_oauthLib == 'pecl') {
+            $this->_oauth = new Dropbox_OAuth_PHP(
+                $keys['consumerKey'],
+                $keys['consumerSecret']
+            );
+        } else {
+            $this->_oauth = new \Dropbox_OAuth_PEAR(
+                $keys['consumerKey'],
+                $keys['consumerSecret']
+            );
+        }
 
         $this->_dropbox = new \Dropbox_API($this->_oauth);
 
@@ -78,6 +88,7 @@ class Dropbox extends Base
             $search .= self::$_lang['de_DE']['conflict'];
         }
         $this->rawConflicts = $this->_dropbox->search($search);
+        debug($this->rawConflicts, 'conflicts');
     }
 
     public function computeConficts()
@@ -95,6 +106,8 @@ class Dropbox extends Base
 
             if (strpos($conflict['mime_type'], 'text/') === 0) {
                 $this->conflicts['text'][$origin][] = $conflict;
+            } else {
+                $this->conflicts[$conflict['mime_type']][$origin][] = $conflict;
             }
         }
     }
@@ -158,21 +171,6 @@ class Dropbox extends Base
 
     public function getDiff()
     {
-
-//         $this->conflicts[0]['content'] = 'aaaaaaaaaa
-// bbbbbbbbbbb
-// ccccccccccccccccc
-// xxxxxxxxxx
-// bbbbbbbbbd
-// drrt';
-//         $this->conflicts[1]['content'] = 'aaaaaaaaaa  
-// ccccccccccccccccc
-// xxxxxxxxxx
-// bbbbbbbbbbb
-
-
-// drrt';
-
         $a = explode("\n", preg_replace('/\r\n|\r/', "\n", $this->conflicts[0]['content']));
         $b = explode("\n", preg_replace('/\r\n|\r/', "\n", $this->conflicts[1]['content']));
 
@@ -186,6 +184,35 @@ class Dropbox extends Base
         $Renderer = new \Diff_Renderer_Html_SideBySide;
         echo $Diff->render($Renderer);
         X\HTML::get()->script('var fullleft='.json_encode($a).', fullright='.json_encode($b).';');
+    }
+
+    public function merge()
+    {
+        if (dirname($_POST['name']).'/' !== $_GET['path']) {
+            $this->_exit('Error', 'Invalid Path');
+        }
+
+        $file = implode("\n", $_POST['merge']);
+        $tmp = tempnam(sys_get_temp_dir(), 'dcm');
+        $tmpDbFile = $_POST['name'].' - merged by Xiphes Dropbox Conflict Merger';
+
+        file_put_contents($tmp, $file);
+        // debug($tmpDbFile, 'add');
+        $this->_dropbox->putFile($tmpDbFile, $tmp);
+
+        foreach ($_POST['currentFiles'] as $delete) {
+            $delete = $_GET['path'].$delete;
+            // debug($delete, 'delete');
+            $r = $this->_dropbox->delete($delete);
+        }
+        unlink($tmp);
+        // debug($tmpDbFile, 'rename');
+        // debug($_POST['name'], 'to');
+        $this->_dropbox->copy($tmpDbFile, $_POST['name']);
+        $r = $this->_dropbox->delete($tmpDbFile);
+
+        // debug($_REQUEST);
+        $this->_exit('OK', 'Merge complete!');
     }
 
     private function _authenticate()

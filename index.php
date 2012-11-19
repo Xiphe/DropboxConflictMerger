@@ -37,10 +37,17 @@ Xiphe\DropboxConflictMerger\Base::benchmark();
 $baseUrl = 'http://localhost/DropboxConflictMerger/';
 $HTML = new Xiphe\HTML($baseUrl);
 
-Xiphe\DropboxConflictMerger\Dropbox::getInstance(array(
-	'consumerKey' => '',
-	'consumerSecret' => ''
-));
+if (file_exists('config.php')) {
+	include 'config.php';
+} else {
+	include 'header.php';
+	$HTML->h2('Error: Configuration array not found!')
+	->p('There should be a file called config.php in the root folder. Check if there is a config-sample.php and rename it to config.php.');
+	include 'footer.php';
+	die();
+}
+
+Xiphe\DropboxConflictMerger\Dropbox::getInstance($config);
 
 $Request = Xiphe\DropboxConflictMerger\Request::getInstance();
 
@@ -50,10 +57,5 @@ $Request = Xiphe\DropboxConflictMerger\Request::getInstance();
 
 include 'header.php';
 $Request->printPage();
-
-$HTML->close('.container-narrow')
-	->jQuery()
-	->js('./res/js/bootstrap.min.js')
-	->js('./res/js/phpdiffmerge.js')
-->close('all');
+include 'footer.php';
 ?>
