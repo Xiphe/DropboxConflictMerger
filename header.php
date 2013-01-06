@@ -35,4 +35,5 @@ $HTML->HTML5(null, 'lang=en')
 		$HTML->rix_a('feedback', 'https://github.com/Xiphe/DropboxConflictMerger/issues')
 	)
 	->hr()
+	->s_div('#content')
 ;

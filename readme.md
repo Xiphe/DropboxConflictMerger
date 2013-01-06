@@ -29,6 +29,8 @@ Relies on [Dropbox-PHP](http://www.dropbox-php.com/) witch requires [PHP OAuth e
 Uses
 ----
 
+* [PHP Diff](https://github.com/chrisboulton/php-diff)
+* [jQuery Merge for php-diff](https://github.com/Xiphe/jQuery-Merge-for-php-diff)
 * [Eden](http://www.eden-php.com/)
 * [HTML](https://github.com/Xiphe/HTML)
 * THETOOLS

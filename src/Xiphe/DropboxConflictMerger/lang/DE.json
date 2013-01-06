@@ -44,8 +44,7 @@
 	"%s - from Chris Boulton" : "%s - von Chris Boulton",
 	"%s - from Twitter" : "%s - von Twitter",
 	"%s - for development" : "%s - für die Entwicklung",
-	"feedback" : "feedback",
-	"This is a Beta release. Please ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!" : "This is a Beta release. Please ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!",
-	"This is a Beta release." : "This is a Beta release.",
-	"%sPlease ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!" : "%sPlease ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!"
+	"feedback" : "Feedback",
+	"This is a Beta release." : "Dies ist eine Beta-Version.",
+	"%sPlease ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!" : "%sBitte überprüfe die Ergebnisse dieses Programms und gib mir %s darüber wie alles für dich funktioniert. Dankeschön!"
 }

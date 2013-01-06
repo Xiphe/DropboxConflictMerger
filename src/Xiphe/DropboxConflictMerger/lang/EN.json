@@ -30,7 +30,7 @@
 	"Files are identical. Maybe the line-endings are different." : "Files are identical. Maybe the line-endings are different.",
 	"Delete conflicted and Continue" : "Delete conflicted and Continue",
 	"Done" : "Done",
-	"Back" : "Back"
+	"Back" : "Back",
 	"example files" : "example files",
 	"If you like to test the conflict merger you can download the %s. Just Extract them, put the two files into your dropbox and reload this page." : "If you like to test the conflict merger you can download the %s. Just Extract them, put the two files into your dropbox and reload this page.",
 	"Hey, my name is Hannes aka Xiphe and i wrote this tool to solve an annoying problem that i have. I store my local development-htdocs folder inside my dropbox because i switch a lot between the three computers i use (Work, Home & MacBook)." : "Hey, my name is Hannes aka Xiphe and i wrote this tool to solve an annoying problem that i have. I store my local development-htdocs folder inside my dropbox because i switch a lot between the three computers i use (Work, Home & MacBook).",
@@ -38,9 +38,13 @@
 	"It got really annoying to check all this conflicts by myself so i decided to build a tool for it. And here it is :)" : "It got really annoying to check all this conflicts by myself so i decided to build a tool for it. And here it is :)",
 	"The Dropbox Conflict Merger will search your entire dropbox for files containing the [...]conflicted copy[...] string and present you a list with all of them. You then can click an entry inside this list and present you a clean dialog to solve the conflict." : "The Dropbox Conflict Merger will search your entire dropbox for files containing the [...]conflicted copy[...] string and present you a list with all of them. You then can click an entry inside this list and present you a clean dialog to solve the conflict.",
 	"Props" : "Props",
-	"This would have been much harder without the following projects." : "This would have been much harder without the following projects."
+	"This would have been much harder without the following projects." : "This would have been much harder without the following projects.",
 	"%s - Dropbox Client Library for PHP" : "%s - Dropbox Client Library for PHP",
 	"%s - from Chris Boulton" : "%s - from Chris Boulton",
 	"%s - from Twitter" : "%s - from Twitter",
-	"%s - for development" : "%s - for development"
+	"%s - for development" : "%s - for development",
+	"feedback" : "feedback",
+	"This is a Beta release." : "This is a Beta release.",
+	"%sPlease ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!" : "%sPlease ensure that the merge results contain the data you wanted and give me some %s about how this is working for you. Thank you!",
+	"Dropbox Conflict Merger" : "Dropbox Conflict Merger"
 }
