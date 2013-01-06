@@ -39,14 +39,14 @@ class Input extends HTML\BasicModule implements HTML\ModuleInterface
     {
         switch ($this->called) {
         case 'textarea':
-            $Tag = new HTML\Tag($this->called, array($this->args[0], $this->args[1]), array('generate'));
+            $Tag = new HTML\Tag($this->called, array($this->args[0], $this->args[1]), array('generate', 'inlineInner'));
             break;
         default:
             $Tag = new HTML\Tag($this->called, array($this->args[0]), array('generate'));
             break;
         }
 
-        if (($this->called == 'checkbox' || $this->called == 'radio') && isset($this->args[2])
+        if ($this->called == 'checkbox' && isset($this->args[2])
             && ($this->args[2] === true || $this->args[2] === 'on' || $this->args[2] === 1
                 || $this->args[2] === $Tag->attributes['id']
                 || (is_array($this->args[2]) && in_array($Tag->attributes['id'], $this->args[2]))

@@ -227,21 +227,13 @@ class Tag
         /*
          * Set attributes and content according to options and self-closing
          */
-        if ($this->isSelfclosing() || $this->hasOption('start')) {
+        if ($this->isSelfclosing() || $this->hasOption('start') || is_array($args[0])) {
             $this->attributes = $args[0];
         } else {
             $this->content = $args[0];
             if (isset($args[1])) {
                 $this->attributes = $args[1];
             }
-        }
-
-        /*
-         * Additional Arguments were passed - try to sprintf them.
-         */
-        if (isset($this->content) && count($args) > 2) {
-            array_splice($args, 0, 2);
-            $this->content = vsprintf($this->content, $args);
         }
 
         /*
@@ -272,6 +264,14 @@ class Tag
 
         $this->update();
         $this->update('content');
+
+        /*
+         * Additional Arguments were passed - try to sprintf them.
+         */
+        if (isset($this->content) && count($args) > 2) {
+            array_splice($args, 0, 2);
+            $this->content = vsprintf($this->content, $args);
+        }
 
         /*
          * Execute Tag generated Hook if Wordpress is available.

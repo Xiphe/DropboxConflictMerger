@@ -1,5 +1,5 @@
 body {
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 40px;
 }
 .container-narrow {
@@ -7,7 +7,7 @@ body {
   max-width: 700px;
 }
 .container-narrow > hr {
-  margin: 30px 0;
+  margin: 20px 0;
 }
 .jumbotron {
   margin: 60px 0;
@@ -21,11 +21,20 @@ body {
   font-size: 21px;
   padding: 14px 24px;
 }
-
+span.number {
+  font-weight: bold;
+  margin-right: 10px;
+}
 input[type="radio"] {
   margin-right: 10px;
 }
-
+li span.warning {
+  display: block;
+  background-color: #DD1144;
+  color: #fff;
+  padding: 5px 15px;
+  margin: 0 -15px;
+}
 table.Differences thead th {
   background: #F7F7F9;
   border-color: #E1E1E8;
@@ -64,4 +73,18 @@ table.Differences {
   color: #333333 !important;
   border-bottom: 1px solid #E1E1E8;
   box-shadow: -1px 1px 7px rgba(0, 0, 0, 0.06);
+}
+.masterhead h3 img {
+  position: relative;
+  top: -2px;
+}
+.masterhead .nav {
+  position: relative;
+  top: 8px;
+  margin-bottom: 0;
+}
+p.info {
+  background-color: #C9E1FF;
+  padding: 5px 7px;
+  line-height: 14px;
 }

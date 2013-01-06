@@ -8,16 +8,16 @@ a dialog to resolve this conflicts.
 Version
 -------
 
-0.1-alpha
+0.2-beta
 
-This is a very early prototype!  
-There will be security issues, stability problems and unexpected behaviors!
+This is a Beta release.  
+Please ensure that the merge results contain the data you wanted and give me some [feedback](https://github.com/Xiphe/DropboxConflictMerger/issues) about how this is working for you. Thank you!
 
 
 Support
 -------
 
-I've written this project for my own needs so i am not willing to give full support. Anyway, i am very interested in any bugs, hints, requests or whatever.
+I've written this project for my own needs and don't want money from you to use it. So i am not willing to give full support. Anyway, i am very interested in any bugs, hints, requests or whatever.
 
 
 Dependencies
@@ -26,29 +26,45 @@ Dependencies
 Relies on [Dropbox-PHP](http://www.dropbox-php.com/) witch requires [PHP OAuth extension](http://pecl.php.net/package/oauth) or [PEAR's HTTP_OAUTH package](http://pear.php.net/package/http_oauth)
 
 
-Installation
-------------
+Uses
+----
 
-1. Install Dropbox-PHP and its dependencies. [See here](http://www.dropbox-php.com/about)
-2. Upload/Put this project on your web-server (I recommend local development only because this is not stable!)
-3. Go to the [Dropbox developer Site](https://www.dropbox.com/developers/apps) 
+* [Eden](http://www.eden-php.com/)
+* [HTML](https://github.com/Xiphe/HTML)
+* THETOOLS
+* [FirePHP](http://www.firephp.org/)
 
-Props
------
+
+Installation/Usage
+------------------
+
+I host this project [here](http://dbcm.xiphe.net/).  
+It's Open Souce so you can see what i'm doing, give me some tips or take parts of this work for your own project.  
+I please you not to host this as it is on just another domain. We do not want to have the same service on two locations. - Thank you.
 
 
 Changelog
 ---------
 
+* 0.2-beta: First Public version.
+
 
 Todo
 ----
+
+* Enhance code structures. Things got a bit messed up.
+    * The Main logic in `src/Xiphe/DropboxConflictMerger/` is not autonomous.
+    * Css/Js are not minified and not placed in relation to their modules.
+* Correct Spelling (Help please)
+* Code Documentation
+* Ensure THEDEBUG is not used in productive mode.
+* Pages should not be in the views folder of dbcm.
 
 
 License
 -------
 
-Copyright (C) 2012 Hannes Diercks
+Copyright (C) 2013 Hannes Diercks
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

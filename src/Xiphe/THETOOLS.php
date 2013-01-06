@@ -96,6 +96,78 @@ class THETOOLS {
      * ---------------- */
 
     /**
+     * Basic encryption method.
+     *
+     * http://www.tfonfara.de/php-encryptdecrypt-funktion-mit-base64-und-schlussel.xhtml
+     *
+     * @param string $string the string that needs encryption.
+     * @param string $key    a key string for the encryption.
+     *
+     * @return string the encrypted string.
+     */
+    public static function encrypt($string, $key) {
+        $result = '';
+        for ($i=0; $i<strlen ($string); $i++) {
+            $char = substr($string, $i, 1);
+            $keychar = substr($key, ($i % strlen($key))-1, 1);
+            $char = chr(ord($char)+ord($keychar));
+            $result .= $char;
+        }
+
+        return base64_encode($result);
+    }
+
+    /**
+     * Basic decryption method.
+     *
+     * http://www.tfonfara.de/php-encryptdecrypt-funktion-mit-base64-und-schlussel.xhtml
+     *
+     * @param string $string a string encrypted by THETOOLS::encrypt().
+     * @param string $key    a key string for the decryption.
+     *
+     * @return string the decrypted string.
+     */
+    public static function decrypt($string, $key) {
+        $result = '';
+        $string = base64_decode($string);
+
+        for ($i=0; $i<strlen($string); $i++) {
+            $char = substr($string, $i, 1);
+            $keychar = substr($key, ($i % strlen($key))-1, 1);
+            $char = chr(ord($char)-ord($keychar));
+            $result .= $char;
+        }
+
+        return $result;
+    }
+
+    public static function getPathsBase(&$a, &$b, $modify = false, $DS = DS) {
+        if ($modify) {
+            $str1 = &$a;
+            $str2 = &$b;
+        } else {
+            $str1 = $a;
+            $str2 = $b;
+        }
+
+        $str1 = explode($DS, self::unify_slashes($str1, $DS));
+        $str2 = explode($DS, self::unify_slashes($str2, $DS));
+        $match = array();
+        for ($i=0; $i < count($str1); $i++) { 
+            if ($str1[$i] === $str2[$i]) {
+                $match[] = $str1[$i];
+            } else {
+                break;
+            }
+        }
+        $match = implode($DS, $match);
+        $str1 = substr(implode($DS, $str1), strlen($match));
+        $str2 = substr(implode($DS, $str2), strlen($match));
+
+        return $match;
+    }
+
+    /**
      * Checks if the given Path is existent and generates missing folders.
      *
      * @param string  $path  the path
@@ -103,7 +175,8 @@ class THETOOLS {
      *
      * @return boolean  true if path is available false if not.
      */
-    public function buildDir($path, $chmod = 0775) {
+    public static function buildDir($path, $chmod = 0775) {
+        deprecated('mkdir($dir, null, true);');
         if (is_dir($path)) {
             return true;
         }
@@ -161,7 +234,7 @@ class THETOOLS {
      * 
      * @return string  a nice readable list of things.
      */
-    public static function readableList($input, $lastSep = null, $defSep = ', ', $inputSep = '|')
+    public static function readableList($input, $lastSep = null, $defSep = ', ', $inputSep = '|', $itemWrap = '')
     {
         if ($lastSep === null) {
             $lastSep = ' '.__('or', 'themaster').' ';
@@ -171,6 +244,11 @@ class THETOOLS {
             $input = explode($inputSep, $input);
         }
         $l = count($input)-1;
+
+        if (!empty($itemWrap)) {
+            $input = self::arrayWrap($input, $itemWrap);
+        }
+
         foreach ($input as $k => $v) {
             if ($k == 0) {
                 $r .= $v;
@@ -182,6 +260,31 @@ class THETOOLS {
         }
         return $r;
     }
+
+    public static function arrayWrap($input, $wrap)
+    {
+        $w1 = '';
+        $w2 = '';
+        if (is_array($wrap)) {
+            $w1 = $wrap[0];
+            if (isset($wrap[1])) {
+                $w2 = $wrap[1];
+            }
+        } elseif (!is_string($wrap)) {
+            throw new \Exception(sprintf('Invalid Type %s for $wrap', gettype($wrap)), 1);
+            return false;
+        } else {
+            $w1 = $wrap;
+            $w2 = $wrap;
+        }
+
+        return array_map(
+           function ($el) use ($w1, $w2) {
+              return $w1.$el.$w2;
+           },
+           $input
+        );
+    }
     
     /**
      * Creates a sprite image at $dest from image files in $imgs array.
@@ -192,7 +295,27 @@ class THETOOLS {
      * @param  integer $spacing numbers of pixels between the images.
      * @return object           object containing the sprite dimensions and the offsets of each image.
      */
-    public static function create_sprite($imgs = array(), $dest = 'sprite.png', $spacing = 5) {
+    public static function create_sprite($imgs = array(), $dest = null, $spacing = 5, $type = 'png') {
+        switch ($type) {
+        case 'jpg':
+        case 'jpeg':
+            $save = 'imagejpeg';
+            $create = 'imagecreatefromjpeg';
+            if ($dest === null) {
+                $dest = 'sprite.jpg';
+            }
+            break;
+        case 'png':
+        default:
+            $save = 'imagepng';
+            $create = 'imagecreatefrompng';
+            if ($dest === null) {
+                $dest = 'sprite.png';
+            }
+            break;
+        }
+
+
         $spriteWidth = 0;
         $spriteHeight = 0;
 
@@ -227,7 +350,7 @@ class THETOOLS {
         $pos = 0;
         foreach ($imgs as $file) {
             $name = pathinfo($file, PATHINFO_FILENAME);
-            $tmp = imagecreatefrompng($file);
+            $tmp = call_user_func_array($create, array($file));
             list($w, $h) = getimagesize($file);
             $r->positions->$name = -$pos;
             $r->sizes->$name = self::sc(array('width' => $w, 'height' => $h));
@@ -241,7 +364,10 @@ class THETOOLS {
             imagedestroy($tmp);
         }
 
-        imagepng($img, $dest);
+        call_user_func_array(
+            $save,
+            array($img, $dest, ($save == 'imagejpeg' ? 100 : 0))
+        );
         imagedestroy($img);
 
         return $r;
@@ -768,23 +894,36 @@ class THETOOLS {
      * curPageURL returns the current url
      * 
      * by http://www.webcheatsheet.com/PHP/get_current_page_url.php
+     * modified by xiphe
      *
-     * @access public
+     * @param  string|array $filter part or parts of the url structure that should be ignored.
+     * 
      * @return string the current URL
      */
-    public static function get_currentUrl()
+    public static function get_currentUrl($filter = array())
     {
-         $pageURL = 'http';
-         if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
-            $pageURL .= "s";
-         }
-         $pageURL .= "://";
-         if (isset($_SERVER["SERVER_PORT"]) && $_SERVER["SERVER_PORT"] != "80") {
-            $pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-         } else {
-            $pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-         }
-         return $pageURL;
+        if (!is_array($filter)) {
+            $filter = array($filter);
+        }
+
+        $pageUrl = '';
+        if (!in_array('http', $filter)) {
+            $pageURL = 'http';
+            if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
+                $pageURL .= "s";
+            }
+            $pageURL .= "://";
+        }
+        if (!in_array('name', $filter)) {
+            $pageURL .= $_SERVER["SERVER_NAME"];
+        }
+        if (!in_array('port', $filter) && isset($_SERVER["SERVER_PORT"]) && $_SERVER["SERVER_PORT"] != "80") {
+            $pageURL .= ":".$_SERVER["SERVER_PORT"];
+        }
+        if (!in_array('request', $filter)) {
+            $pageURL .= $_SERVER["REQUEST_URI"];
+        }
+        return $pageURL;
     }
 
     /**
@@ -1392,18 +1531,18 @@ class THETOOLS {
      * @param  array $requiredArgs the required keys.
      * @return string|false        Error string or false if no Error found.
      */
-    public static function get_requiredArgsError($args, $requiredArgs)
+    public static function getRequiredArgsError($args, $requiredArgs)
     {
-        if (!is_array($args)) {
-            return __('$args is not an array', 'themaster');
+        if (!is_array($args) && !is_object($args)) {
+            return sprintf(__('invalid type "%s" for $args', 'themaster'), gettype($args));
         }
-        if (!is_array($requiredArgs)) {
-            return __('$required is not an array', 'themaster');
+        if (!is_array($requiredArgs) && !is_object($args)) {
+            return sprintf(__('invalid type "%s" for $requiredArgs', 'themaster'), gettype($requiredArgs));
         }
 
         $missing = array();
         foreach ($requiredArgs as $req) {
-            if (!isset($args[$req])) {
+            if (!@isset($args[$req]) && !@isset($args->$req)) {
                 $missing[] = $req;
             }
         }
@@ -1411,14 +1550,17 @@ class THETOOLS {
         if (count($missing) == 0) {
             return false;
         } else {
-            if (count($missing) == 1) {
-                return sprintf(__('Missing "%s" as a key.', 'themaster'), $missing[0]);
-            } else {
-                $and = $missing[count($missing)-1];
-                unset($missing[count($missing)-1]);
-                $missing = implode(', ', $missing).' '.__('and', 'themaster').' '.$and;
-                return sprintf(__('Missing "%s" as keys.', 'themaster'), $missing);
-            }
+            return sprintf(
+                __('Missing %s as %s.', 'themaster'),
+                self::readableList(
+                    $missing,
+                    ' '.__('and').' ',
+                    ', ',
+                    null,
+                    '"'
+                ),
+                (count($missing) === 1 ? 'a key' : 'keys')
+            );
         }
     }
 
@@ -1476,22 +1618,31 @@ class THETOOLS {
      * @param  array  $add       optional array of values to be added to the query
      * @return void
      */
-    public static function filter_urlQuery(&$url, $filterArr, $method = 'remove', array $add = array()) {
+    public static function filter_urlQuery(&$url, $filterArr, $method = null, array $add = array()) {
+        if ($method === null) {
+            $method = 'remove';
+        }
+
         $pUrl = parse_url($url);
         $qry;
-        parse_str($pUrl['query'], $qry);
-
-       
-
-        if (!empty($add)) {
-            $qry = array_merge($qry, $add);
+        if (isset($pUrl['query'])) {
+            parse_str($pUrl['query'], $qry);
+        } else {
+            $qry = array();
         }
+        
+        self::filter_data($qry, $filterArr, $method, $add);
+
         $pUrl['query'] = http_build_query($qry);
         $url = self::unparse_url($pUrl);
     }
 
-    public static function filter_data($data, $filterArr, $method = 'keep', $add = false)
+    public static function filter_data(&$data, $filterArr, $method = null, $add = false)
     {
+        if ($method === null) {
+            $method = 'keep';
+        }
+
         foreach ($data as $k => $v) {
             if (($method == 'remove' && in_array($k, $filterArr))
              || ($method == 'keep' && !in_array($k, $filterArr))

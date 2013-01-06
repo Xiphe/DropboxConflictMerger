@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
                     {
                         action: 'merge',
                         merge: merge,
-                        name: $('input.filename:checked').val(),
+                        name: $('input#keep').val(),
                         currentFiles: currentFiles
                     }, function(r) {
                         r = eval('('+r+')');

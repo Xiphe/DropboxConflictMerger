@@ -8,7 +8,7 @@ namespace Xiphe\DropboxConflictMerger;
  * Provides singleton logic, the result/exit/error mechanics
  * and some handy methods.
  *
- * @copyright Copyright (c) 2012, Hannes Diercks
+ * @copyright Copyright (c) 2013, Hannes Diercks
  * @author    Hannes Diercks <xiphe@gmx.de>
  * @license   http://www.gnu.org/licenses/gpl-2.0.txt GNU GENERAL PUBLIC LICENSE
  * @version   1.1.0
