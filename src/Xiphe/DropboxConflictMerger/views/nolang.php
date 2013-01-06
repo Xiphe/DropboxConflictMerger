@@ -9,5 +9,5 @@ $HTML->h2('Sorry!')
 	->p('Or you grab %s, translate everything and create a git pull request or an issue to let '.
 		'me know about your work.',
 		null,
-		$HTML->ri_a('this translation file', 'https://raw.github.com/Xiphe/DropboxConflictMerger/master/lang/EN.json')
+		$HTML->ri_a('this translation file', 'https://github.com/Xiphe/DropboxConflictMerger/blob/master/src/Xiphe/DropboxConflictMerger/lang/EN.json')
 	);

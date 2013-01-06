@@ -71,9 +71,9 @@ if (Dropbox::getInstance()->justLineEndings()) {
 	));
 } else {
 	$i = 1;
-	$HTML->end('.container-narrow')->s_div('.row-fluid|style=width: 90%; margin:auto;');
+	$HTML->end('.container-narrow')->s_div('.row-fluid|#thediff|style=width: 90%; margin:auto;');
 	Dropbox::getInstance()->getDiff();
-	$HTML->end('.row-fluid')->s_div('.container-narrow')
+	$HTML->end('.row-fluid')->s_div('.container-narrow|#sub')->s_div('.content')
 	->x_a('Use All Left', '#left|%#left|.btn pull-left|style=margin-top: 10px;')
 	->x_a('Use All Right', '#right|%#right|.btn pull-right|style=margin-top: 10px;')
 	->div(null, '.clearfix')->hr()
@@ -110,6 +110,7 @@ if (Dropbox::getInstance()->justLineEndings()) {
 	// 	)
 	// )
 	->script('var currentFiles = %s;', null, json_encode(array($fileA, $fileB)))
-	->x_a('Merge and next', '#merge|%#merge|.btn btn-large pull-right|style=margin-top: 10px;');
+	->x_a('Merge and next', '#merge|%#merge|.btn btn-large pull-right|style=margin-top: 10px;')
+	->img('src=./res/img/loadinfo.net.gif|alt=loading|class=pull-right|#loader');
 }
 endif;

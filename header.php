@@ -11,7 +11,7 @@ $HTML->HTML5(null, 'lang=en')
 
 ->close('head')
 ->s_body()
-	->s_div('.container-narrow')
+	->s_div('.container-narrow|#main')
 	->s_div('.masterhead');
 	if (!isset($_GET['page']) || $_GET['page'] !== 'welcome') {
 		$HTML->gs_ul('.nav nav-pills pull-right')
@@ -35,5 +35,5 @@ $HTML->HTML5(null, 'lang=en')
 		$HTML->rix_a('feedback', 'https://github.com/Xiphe/DropboxConflictMerger/issues')
 	)
 	->hr()
-	->s_div('#content')
+	->s_div('.content')
 ;

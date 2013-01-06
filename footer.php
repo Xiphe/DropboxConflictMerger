@@ -1,5 +1,5 @@
 <?php
-$HTML->close('#content')->div(null, '.clearfix')
+$HTML->close('.content')->div(null, '.clearfix')
 	->s_footer()
 		->hr()
 		->s_p()

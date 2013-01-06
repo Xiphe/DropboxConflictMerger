@@ -19,6 +19,8 @@ jQuery(document).ready(function($) {
         	// debug: true,
             button: '#merge',
         	merged: function(merge) {
+                $('#merge').attr('disabled', 'disabled');
+                $('#loader').addClass('load');
                 $.post(
                     window.location,
                     {
@@ -30,6 +32,10 @@ jQuery(document).ready(function($) {
                         r = eval('('+r+')');
                         if (r.status === 'OK') {
                             window.location.href=window.location.href;
+                        } else {
+                            $('#loader').removeClass('load');
+                            $('#thediff').remove();
+                            $('#sub').html(r.msg);
                         }
                     }
                 );
