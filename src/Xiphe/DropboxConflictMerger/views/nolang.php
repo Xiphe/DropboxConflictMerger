@@ -11,3 +11,6 @@ $HTML->h2('Sorry!')
 		null,
 		$HTML->ri_a('this translation file', 'https://github.com/Xiphe/DropboxConflictMerger/blob/master/src/Xiphe/DropboxConflictMerger/lang/EN.json')
 	);
+
+
+	Dropbox::getInstance()->googleAnalytics();

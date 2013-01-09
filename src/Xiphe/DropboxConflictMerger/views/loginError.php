@@ -7,3 +7,5 @@ $HTML->x_h2('Sorry!')
 		$HTML->rxi_a('retry', array('href' => $HTML->getOption('baseUrl'))),
 		$HTML->rxi_a('write a bug report', '')
 	);
+
+	Dropbox::getInstance()->googleAnalytics();

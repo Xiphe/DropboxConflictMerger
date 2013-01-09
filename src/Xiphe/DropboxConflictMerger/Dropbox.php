@@ -43,6 +43,7 @@ class Dropbox extends Base
     public function init($config = null) {
         $this->_encyptionKey = $config['encryptionKey'];
         $this->_baseUrl = $config['baseUrl'];
+        $this->_gaTrackingCode = $config['gaTrackingCode'];
 
         self::$_tmpFolder = dirname(__FILE__).DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR;
         if (self::$_oauthLib == 'pecl') {
@@ -64,6 +65,25 @@ class Dropbox extends Base
         // $this->getRawConflicts();
 
         // $this->computeConficts();
+    }
+
+    public function googleAnalytics()
+    {
+        \Xiphe\HTML::get()    
+            ->js("
+                var _gaq = _gaq || [];
+                    _gaq.push(['_setAccount', '%s']);
+                    _gaq.push(['_trackPageview']);
+
+                    (function() {
+                        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                    })();
+                ",
+                null,
+                $this->_gaTrackingCode
+            );
     }
 
     public function getConflictStr($for = 'search')

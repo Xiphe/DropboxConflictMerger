@@ -28,3 +28,5 @@ $HTML //->s_div('.jumbotron')
 		.'I will get 500MB additional space in my Box if you do it :) Thank you!'
 	)
 	->x_a('Register at Dropbox', 'href=http://db.tt/nDphHU0|title=Register for a Dropbox account|.btn');
+
+	Dropbox::getInstance()->googleAnalytics();

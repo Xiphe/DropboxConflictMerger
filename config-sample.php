@@ -8,4 +8,6 @@ $config = eden('registry')
 	// ->set('baseUrl', '')
 	/* Encryption Key for cookies */
 	// ->set('encryptionKey', '')
+	/* Google Analytics Tracking Code */
+	// ->set('gaTrackingCode', '')
 ;
